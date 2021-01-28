@@ -1,11 +1,11 @@
+const { RSA_X931_PADDING } = require('constants');
 const readline = require('readline');
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-let secretNumber = 23;
-askGuess();
+
 
 function checkGuess(num) {
     if (num > secretNumber) {
@@ -21,14 +21,45 @@ function checkGuess(num) {
 }
 
 function askGuess() {
-    rl.question('Enter a guess: ', (answer) => {
-        if (Number(answer) === secretNumber) {
-            console.log("You win!");
-            rl.close;
-        } else {
-            
-            checkGuess(answer);
+    if (numAttempts === 0) {
+        console.log('You lose');
+    }
+    if (numAttempts > 0) {
+        rl.question('Enter a guess: ', (answer) => {
+            if (Number(answer) === secretNumber) {
+                console.log("You win!");
+                rl.close;
+            } else {
+
+                checkGuess(answer);
+                askGuess();
+            }
+        });
+    }
+    numAttempts--;
+}
+
+function randomInRange (min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+function askRange() {
+    rl.question("Enter a max number: ", (max) => {
+        rl.question("Enter a min number: ", (min) => {
+            console.log(`I'm thinking of a number between ${min} and ${max}...`)
+            secretNumber = randomInRange(Number(min),Number(max));
             askGuess();
-        }
-      });
-};
+        })
+    })
+}
+
+function askLimit() {
+    rl.question("How many turns do you want? ", (num) => {
+        numAttempts = num;
+        askRange();
+    })
+}
+
+askLimit();
