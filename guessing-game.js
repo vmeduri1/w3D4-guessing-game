@@ -4,7 +4,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-let secretNumber = Number(23);
+let secretNumber = 23;
 askGuess();
 
 function checkGuess(num) {
@@ -26,10 +26,9 @@ function askGuess() {
             console.log("You win!");
             rl.close;
         } else {
+            
             checkGuess(answer);
             askGuess();
         }
       });
-}
-
-askGuess();
+};
